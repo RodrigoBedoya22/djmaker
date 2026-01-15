@@ -4,6 +4,8 @@ Dj maker es un script que facilita la creación de proyectos django : creando un
 ## Instalación
 En la carpeta donde se va a crear el proyecto, clone este repositorio.
 
+`git clone https://github.com/RodrigoBedoya22/djmaker.git`
+
 Luego de clonado el repositorio, abra una terminal en la carpeta donde se encuentra el script y ejecute:
 
 `python djmaker.py`
