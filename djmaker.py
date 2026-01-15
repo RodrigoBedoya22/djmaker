@@ -1,4 +1,4 @@
-import sys, os , asyncio
+import os , asyncio
 
 async def crearEntornoVirtual():
     """
@@ -9,7 +9,7 @@ async def crearEntornoVirtual():
     print("===============================\n")
 
     creacion = await asyncio.create_subprocess_exec(
-        sys.executable, "-m", "venv", "venv"
+        "python", "-m", "venv", "venv"
     )
     await creacion.wait()
     print("\nEntorno virtual creado")
