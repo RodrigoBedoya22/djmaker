@@ -167,7 +167,7 @@ async def crearAppApi(proyecto,nombre_app):
 async def main():
     
     await crearEntornoVirtual()
-    await instalarLibrerias(["django", "flask"])
+    await instalarLibrerias(["django"])
     await crearProyecto()
     print("Fin del programa")
 
