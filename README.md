@@ -18,14 +18,12 @@ En primer lugar, DjMaker creará un entorno virtual python en una carpeta llamad
 
 ## 2. Instalación de librerias
 En segundo lugar, se utilizará el entorno virtual creado anteriormente para instalar las dependencias necesarias.
-Las dependencias necesarias pueden modificarse en la linea 170 del codigo, donde se le pasa una lista con todas las dependencias a instalar.
+Las dependencias a instalar pueden ser modificadas en la funcion **instalarLibrerias()** dentro de la funcion **main**, al final del codigo
 
-167 async def main():
-168   
-169    await crearEntornoVirtual()
-170    await instalarLibrerias(["django", "flask"]) <-- aqui se ponen las librerias
-171    await crearProyecto()
-172    print("Fin del programa")
+`await instalarLibrerias(["django", "flask"])` <-- aqui se ponen las librerias necesarias
+
+**NOTA**: El script no está pensado para instalar versiones concretas de dependencias, por lo que de momento instalará las versiones mas recientes de las mismas.
+
 
 ## 3. Creación del proyecto
 En tercer lugar, instaladas ya las dependencias necesarias, se procederá a la creacion del proyecto.
