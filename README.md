@@ -6,7 +6,8 @@ En la carpeta donde se va a crear el proyecto, clone este repositorio.
 
 `git clone https://github.com/RodrigoBedoya22/djmaker.git`
 
-Luego de clonado el repositorio, abra una terminal en la carpeta donde se encuentra el script y ejecute:
+Una vez clonado el repositorio se creará la carpeta djmaker con el archivo **djmaker.py**, mueva el archivo **djmaker.py** fuera de la carpeta djmaker.
+Una vez movido el archivo, ejecute:
 
 `python djmaker.py`
 
