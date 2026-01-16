@@ -4,13 +4,12 @@ async def crearEntornoVirtual():
     """
     Crea el entorno virtual donde se instalaran las dependencias para el proyecto
     """
-    print("\n===============================")
-    print("|| Creando entorno virtual... ||")
-    print("===============================\n")
+
+    mostrarTitulo("Creando entorno virtual...")
 
     await ejecutarProceso(("python", "-m", "venv", "venv"))
 
-    print("\nEntorno virtual creado")
+    print("Entorno virtual creado")
 
 async def instalarLibrerias(librerias: list[str]):
     """
@@ -19,26 +18,23 @@ async def instalarLibrerias(librerias: list[str]):
     :param librerias: La lista de librerias a instalar en el entorno virtual
     :type librerias: list[str]
     """
-    print("\n===============================")
-    print("||  Instalando librerias...   ||")
-    print("===============================\n")
+
+    mostrarTitulo("Instalando librerias...")
 
     entorno = os.path.join("venv", "Scripts", "python.exe")
+    
     for libreria in librerias:
         print(f"Instalando {libreria}...\n")
         
         await ejecutarProceso((entorno, "-m", "pip", "install", libreria))
 
-        print(f"\nLibreria {libreria} instalada correctamente\n")
+        print(f"\nLibreria {libreria} instalada correctamente")
 
 async def crearProyecto():
     """
     Crea un proyecto django con el nombre indicado en los input
     """
-
-    print("\n===============================")
-    print("||     Creando proyecto...    ||")
-    print("===============================\n")
+    mostrarTitulo("Creando proyecto...")
 
     nombre_proyecto = str(input("Ingrese el nombre de su proyecto: "))
 
@@ -61,12 +57,13 @@ async def crearAplicacionesEnProyecto(proyecto):
     
     :param proyecto: El proyecto donde se crearán las aplicaciones indicadas.
     """
-    print("\n===============================")
-    print("||   Creando aplicaciones...  ||")
-    print("===============================\n")
+
+    mostrarTitulo("Creando aplicaciones...")
 
     while True:
+
         cant_aplicaciones = int(input("¿Cuántas aplicaciones desea crear?: "))
+
         if cant_aplicaciones <= 0:
            print("Error: El numero de aplicaciones debe ser mayor a cero.")
         else:
@@ -81,6 +78,7 @@ async def crearAplicacionesEnProyecto(proyecto):
 
         #ingresar naturaleza de la aplicacion: web/api
         while True:
+
             naturaleza_app = str(input("Ingrese la naturaleza de la app [web/api]: ")).lower()
 
             if naturaleza_app == "web":
@@ -92,7 +90,7 @@ async def crearAplicacionesEnProyecto(proyecto):
             else:
                 print("\nLa naturaleza ingresada no es válida.\n")
 
-        print(f"\nApplicaciones creadas [ {num_app} / {cant_aplicaciones} ]")
+        print(f"\nApplicaciones creadas [ {num_app} / {cant_aplicaciones} ]\n")
     
     print("Todas las aplicaciones fueron creadas correctamente\n")
 
@@ -110,7 +108,7 @@ async def crearApp(proyecto,nombre_app):
 
     await ejecutarProceso((django_path, "startapp", nombre_app), cwd=proyecto)
 
-    print(f"\nAplicacion {nombre_app} creada con exito \n")
+    print(f"\nAplicacion {nombre_app} creada con exito")
 
 async def crearAppWeb(proyecto,nombre_app):
     """
@@ -125,42 +123,22 @@ async def crearAppWeb(proyecto,nombre_app):
     """
     #Se llama a crearApp estandar
     await crearApp(proyecto,nombre_app)
-
-    #
+    
+    #Se crea la carpeta templates y una carpeta con el nombre de la app
     templates_path= os.path.join(proyecto,nombre_app,"templates", nombre_app)
     os.makedirs(templates_path, exist_ok=True)
 
     #Crear archivo index.html
     html = os.path.join(templates_path, "index.html")
-    htmlCont ="""
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-                
-</body>
-</html>
-    """
+    HTML_CONT ="""<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Document</title>\n</head>\n<body>\n\n</body>\n</html>"""
     with open(html, 'w') as f:
-        f.write(htmlCont)
-        
+        f.write(HTML_CONT) 
 
     #Crear archivo urls.py
     urls = os.path.join(proyecto, nombre_app, "urls.py")
-    urlsCont=  """
-from django.contrib import admin
-from django.urls import path
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-]
-     """
+    URLS_CONT=  """from django.contrib import admin\nfrom django.urls import path\n\nurlpatterns = [\n   path('admin/', admin.site.urls),\n]"""
     with open(urls, 'w') as f:
-        f.write(urlsCont)
+        f.write(URLS_CONT)
 
 async def crearAppApi(proyecto,nombre_app):
     await crearApp(proyecto,nombre_app)
@@ -174,6 +152,10 @@ async def ejecutarProceso(comando, cwd=None):
     """
     proceso = await asyncio.create_subprocess_exec(*comando, cwd=cwd)
     await proceso.wait()
+
+def mostrarTitulo(titulo):
+    barra= "="*(len(titulo)+10)
+    print(f"\n{barra} \n||   {titulo}   ||\n{barra}\n" )
 
 async def main():
     
