@@ -8,10 +8,8 @@ async def crearEntornoVirtual():
     print("|| Creando entorno virtual... ||")
     print("===============================\n")
 
-    creacion = await asyncio.create_subprocess_exec(
-        "python", "-m", "venv", "venv"
-    )
-    await creacion.wait()
+    await ejecutarProceso(("python", "-m", "venv", "venv"))
+
     print("\nEntorno virtual creado")
 
 async def instalarLibrerias(librerias: list[str]):
@@ -29,10 +27,8 @@ async def instalarLibrerias(librerias: list[str]):
     for libreria in librerias:
         print(f"Instalando {libreria}...\n")
         
-        proceso = await asyncio.create_subprocess_exec(
-            entorno, "-m", "pip", "install", libreria
-        )
-        await proceso.wait()
+        await ejecutarProceso((entorno, "-m", "pip", "install", libreria))
+
         print(f"\nLibreria {libreria} instalada correctamente\n")
 
 async def crearProyecto():
@@ -50,10 +46,8 @@ async def crearProyecto():
 
     django_admin_path = os.path.join("venv", "Scripts", "django-admin.exe")
 
-    iniciarProyecto = await asyncio.create_subprocess_exec(
-        django_admin_path, "startproject", nombre_proyecto
-    )
-    await iniciarProyecto.wait()
+    await ejecutarProceso((django_admin_path, "startproject", nombre_proyecto))
+
     print(f"Proyecto {nombre_proyecto} creado con exito \n")
     
     await crearAplicacionesEnProyecto(nombre_proyecto)
@@ -96,7 +90,7 @@ async def crearAplicacionesEnProyecto(proyecto):
                 await crearAppApi(proyecto, nombre_app)
                 break
             else:
-                print("\nLa naturaleza ingresada es inválida.\n")
+                print("\nLa naturaleza ingresada no es válida.\n")
 
         print(f"\nApplicaciones creadas [ {num_app} / {cant_aplicaciones} ]")
     
@@ -113,11 +107,8 @@ async def crearApp(proyecto,nombre_app):
     django_path = os.path.abspath(os.path.join("venv", "Scripts", "django-admin.exe"))
 
     print(f"\nCreando app '{nombre_app}'...")
-    crearApp = await asyncio.create_subprocess_exec(
-        django_path, "startapp", nombre_app, 
-        cwd= proyecto
-    )
-    await crearApp.wait()
+
+    await ejecutarProceso((django_path, "startapp", nombre_app), cwd=proyecto)
 
     print(f"\nAplicacion {nombre_app} creada con exito \n")
 
@@ -174,10 +165,14 @@ urlpatterns = [
 async def crearAppApi(proyecto,nombre_app):
     await crearApp(proyecto,nombre_app)
 
+async def ejecutarProceso(comando, cwd=None):
+    proceso = await asyncio.create_subprocess_exec(*comando, cwd=cwd)
+    await proceso.wait()
+
 async def main():
     
     await crearEntornoVirtual()
-    await instalarLibrerias(["django"])
+    await instalarLibrerias(["django "])
     await crearProyecto()
     print("Fin del programa")
 
