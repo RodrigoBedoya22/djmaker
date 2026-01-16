@@ -71,7 +71,12 @@ async def crearAplicacionesEnProyecto(proyecto):
     print("||   Creando aplicaciones...  ||")
     print("===============================\n")
 
-    cant_aplicaciones = int(input("¿Cuántas aplicaciones desea crear?: "))
+    while True:
+        cant_aplicaciones = int(input("¿Cuántas aplicaciones desea crear?: "))
+        if cant_aplicaciones <= 0:
+           print("Error: El numero de aplicaciones debe ser mayor a cero.")
+        else:
+           break
 
     for i in range(cant_aplicaciones):
         num_app = i+1
@@ -81,12 +86,17 @@ async def crearAplicacionesEnProyecto(proyecto):
         nombre_app = str(input("Ingrese el nombre de la app: "))
 
         #ingresar naturaleza de la aplicacion: web/api
-        naturaleza_app = str(input("Ingrese la naturaleza de la app [web/api]: ")).lower()
+        while True:
+            naturaleza_app = str(input("Ingrese la naturaleza de la app [web/api]: ")).lower()
 
-        if naturaleza_app == "web":
-            await crearAppWeb(proyecto, nombre_app)
-        elif naturaleza_app == "api":
-            await crearAppApi(proyecto, nombre_app)
+            if naturaleza_app == "web":
+                await crearAppWeb(proyecto, nombre_app)
+                break
+            elif naturaleza_app == "api":
+                await crearAppApi(proyecto, nombre_app)
+                break
+            else:
+                print("\nLa naturaleza ingresada es inválida.\n")
 
         print(f"\nApplicaciones creadas [ {num_app} / {cant_aplicaciones} ]")
     
