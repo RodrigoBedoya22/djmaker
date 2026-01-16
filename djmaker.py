@@ -22,7 +22,7 @@ async def instalarLibrerias(librerias: list[str]):
     mostrarTitulo("Instalando librerias...")
 
     entorno = os.path.join("venv", "Scripts", "python.exe")
-    
+
     for libreria in librerias:
         print(f"Instalando {libreria}...\n")
         
@@ -61,7 +61,6 @@ async def crearAplicacionesEnProyecto(proyecto):
     mostrarTitulo("Creando aplicaciones...")
 
     while True:
-
         cant_aplicaciones = int(input("¿Cuántas aplicaciones desea crear?: "))
 
         if cant_aplicaciones <= 0:
@@ -70,15 +69,14 @@ async def crearAplicacionesEnProyecto(proyecto):
            break
 
     for i in range(cant_aplicaciones):
-        num_app = i+1
+        
+        print(F"\nCreando aplicacion {i+1}\n")
 
-        print(F"\nCreando aplicacion {num_app}\n")
         #ingresar nombre de la aplicacion
         nombre_app = str(input("Ingrese el nombre de la app: "))
 
         #ingresar naturaleza de la aplicacion: web/api
         while True:
-
             naturaleza_app = str(input("Ingrese la naturaleza de la app [web/api]: ")).lower()
 
             if naturaleza_app == "web":
@@ -90,7 +88,7 @@ async def crearAplicacionesEnProyecto(proyecto):
             else:
                 print("\nLa naturaleza ingresada no es válida.\n")
 
-        print(f"\nApplicaciones creadas [ {num_app} / {cant_aplicaciones} ]\n")
+        print(f"\nApplicaciones creadas [ {i+1} / {cant_aplicaciones} ]\n")
     
     print("Todas las aplicaciones fueron creadas correctamente\n")
 
@@ -101,7 +99,6 @@ async def crearApp(proyecto,nombre_app):
     :param proyecto: El proyecto donde se creará la app
     :param nombre_app: El nombre que tendrá la app
     """
-
     django_path = os.path.abspath(os.path.join("venv", "Scripts", "django-admin.exe"))
 
     print(f"\nCreando app '{nombre_app}'...")
@@ -154,6 +151,11 @@ async def ejecutarProceso(comando, cwd=None):
     await proceso.wait()
 
 def mostrarTitulo(titulo):
+    """
+    Representa en consola el titulo dado con un recuadro
+    
+    :param titulo: El titulo a mostar 
+    """
     barra= "="*(len(titulo)+10)
     print(f"\n{barra} \n||   {titulo}   ||\n{barra}\n" )
 
