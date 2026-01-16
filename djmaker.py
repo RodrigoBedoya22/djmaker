@@ -166,6 +166,12 @@ async def crearAppApi(proyecto,nombre_app):
     await crearApp(proyecto,nombre_app)
 
 async def ejecutarProceso(comando, cwd=None):
+    """
+    Ejecuta un comando en consola
+    
+    :param comando: Una tupla con todos los parametros del comando ordenados
+    :param cwd: Una directorio (opcional)
+    """
     proceso = await asyncio.create_subprocess_exec(*comando, cwd=cwd)
     await proceso.wait()
 
