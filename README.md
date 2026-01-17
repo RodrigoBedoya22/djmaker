@@ -39,6 +39,6 @@ Por cada aplicación se pedirá ingresar el nombre que tendrá la misma y selecc
 - **api** Una aplicacion api será una aplicación pensada para jsonresponse, por lo que no contedrá la carpeta **templates**
 
 Si desea crear una aplicación web: seleccione la opción 1. 
-Si desea crear una aplicación api: seleccione la opción 2.
 
+Si desea crear una aplicación api: seleccione la opción 2.
 
