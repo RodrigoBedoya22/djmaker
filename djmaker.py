@@ -95,7 +95,7 @@ async def crearAplicacionesEnProyecto(proyecto):
         #ingresar naturaleza de la aplicacion: web/api
         while True:
 
-            naturaleza_app = int(input("""\nNaturaleza de la aplicación\n\n-   1. Web\n-   2. Api\n\nSeleccione una naturaleza (1-2): """))
+            naturaleza_app = int(input("\nNaturaleza de la aplicación\n\n\t-1. Web\n\t-2. Api\n\nSeleccione una naturaleza (1-2): """))
 
             if naturaleza_app == 1:
                 await crearAppWeb(proyecto, nombre_app)
@@ -149,13 +149,13 @@ async def crearAppWeb(proyecto,nombre_app):
 
     #Crear archivo index.html
     html = os.path.join(templates_path, "index.html")
-    HTML_CONT ="""<!DOCTYPE html>\n<html lang="en">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>Document</title>\n</head>\n<body>\n\n</body>\n</html>"""
+    HTML_CONT ="""<!DOCTYPE html>\n<html lang="en">\n<head>\n\t<meta charset="UTF-8">\n\t<meta name="viewport" content="width=device-width, initial-scale=1.0">\n\t<title>Document</title>\n</head>\n<body>\n\n</body>\n</html>"""
     with open(html, 'w') as f:
         f.write(HTML_CONT) 
 
     #Crear archivo urls.py
     urls = os.path.join(proyecto, nombre_app, "urls.py")
-    URLS_CONT=  """from django.contrib import admin\nfrom django.urls import path\n\nurlpatterns = [\n   path('admin/', admin.site.urls),\n]"""
+    URLS_CONT=  """from django.contrib import admin\nfrom django.urls import path\n\nurlpatterns = [\n\tpath('admin/', admin.site.urls),\n]"""
     with open(urls, 'w') as f:
         f.write(URLS_CONT)
 
@@ -179,7 +179,7 @@ def mostrarTitulo(titulo):
     :param titulo: El titulo a mostar 
     """
     barra= "="*(len(titulo)+10)
-    print(f"\n{barra} \n||   {titulo}   ||\n{barra}\n" )
+    print(f"\n{barra}\n||   {titulo}   ||\n{barra}\n")
 
 def instalarApp(nombre_proyecto, nombre_aplicacion):
     """
