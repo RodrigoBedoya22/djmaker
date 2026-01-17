@@ -56,12 +56,16 @@ async def crearProyecto():
 
 async def crearAplicacionesEnProyecto(proyecto):
     """
-    Crea la cantidad de aplicaciones dada en el input "cant_aplicaciones"
+    Crea la cantidad de aplicaciones dada en el input "cant_aplicaciones".
+    Una vez creada la aplicación, se instalará automaticamente en el proyecto.
+
     Por cada aplicacion se pedira los input:
         -nombre : el nombre de la aplicacion
-        -naturaleza: la naturaleza de la aplicacion, puede ser web o api
-    
-    :param proyecto: El proyecto donde se crearán las aplicaciones indicadas.
+        -naturaleza: la naturaleza de la aplicacion, debe seleccionar una opcion de las siguientes:
+            - 1. Naturaleza web
+            - 2. Naturaleza api
+
+    :param proyecto: El proyecto donde se crearán e instalarán las aplicaciones indicadas.
     """
 
     mostrarTitulo("Creando aplicaciones...")
@@ -101,6 +105,10 @@ async def crearAplicacionesEnProyecto(proyecto):
                 break
             else:
                 print("\nERROR: La naturaleza ingresada no es válida. Ingrese una opción válida.\n")
+
+        #instalar app en proyecto
+
+        instalarApp(proyecto,nombre_app)
 
         print(f"\nAplicaciones creadas [ {i+1} / {cant_aplicaciones} ]\n")
     
@@ -173,10 +181,36 @@ def mostrarTitulo(titulo):
     barra= "="*(len(titulo)+10)
     print(f"\n{barra} \n||   {titulo}   ||\n{barra}\n" )
 
-async def main():
+def instalarApp(nombre_proyecto, nombre_aplicacion):
+    """
+    Agrega la app dada a la lista de aplicaciones instaladas del proyecto dado.
     
+    :param nombre_proyecto: El nombre del proyecto en el cual se instalará la app
+    :param nombre_aplicacion: El nombre de la aplicacion a agregar a la lista de aplicaciones instaladas del proyecto
+    """
+    SETTINGS_PROYECTO = f"{nombre_proyecto}/{nombre_proyecto}/settings.py"
+
+    with open(SETTINGS_PROYECTO, 'r') as archivo:
+        lineas= archivo.readlines()
+        
+    with open(SETTINGS_PROYECTO, 'w') as archivo:
+        #se busca el lugar donde agregar la app
+        instaladas_index= lineas.index('INSTALLED_APPS = [\n')
+        nuevo = lineas[0:instaladas_index+1]
+
+        #se agrega el nombre de la app al principio de la lista
+        nuevo.append(f"\t'{nombre_aplicacion}',\n")
+
+        #se termina sobreescribe con el archivo settings.py con el nuevo contenido
+        nuevo = nuevo + lineas[instaladas_index+1:len(lineas)]
+        archivo.writelines(nuevo)
+
+async def main():
     await crearEntornoVirtual()
+
+    #agregar aqui las dependencias deseadas (EJ : ["django", "flask", "pillow", etc...])
     await instalarLibrerias(["django"])
+
     await crearProyecto()
     print("Fin del programa")
 
