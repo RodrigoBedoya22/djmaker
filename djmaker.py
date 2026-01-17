@@ -36,7 +36,13 @@ async def crearProyecto():
     """
     mostrarTitulo("Creando proyecto...")
 
-    nombre_proyecto = str(input("Ingrese el nombre de su proyecto: "))
+    while True:
+        nombre_proyecto = str(input("Ingrese el nombre de su proyecto: "))
+
+        if " " in nombre_proyecto:
+            print("\nERROR: El nombre del proyecto no debe contener espacios (Ej: 'mi_proyecto'). Intentelo denuevo.\n ")
+        else:
+            break
 
     print(f"\nCreando proyecto llamado '{nombre_proyecto}' \n")
 
@@ -64,7 +70,7 @@ async def crearAplicacionesEnProyecto(proyecto):
         cant_aplicaciones = int(input("¿Cuántas aplicaciones desea crear?: "))
 
         if cant_aplicaciones <= 0:
-           print("Error: El numero de aplicaciones debe ser mayor a cero.")
+           print("\nERROR: El número de aplicaciones debe ser mayor a cero.\n")
         else:
            break
 
@@ -73,22 +79,30 @@ async def crearAplicacionesEnProyecto(proyecto):
         print(F"\nCreando aplicacion {i+1}\n")
 
         #ingresar nombre de la aplicacion
-        nombre_app = str(input("Ingrese el nombre de la app: "))
+
+        while True:
+            nombre_app = str(input("Ingrese el nombre de la app: "))
+
+            if " " in nombre_app:
+                print("\nERROR: El nombre de la aplicación no debe contener espacios (Ej: 'mi_aplicación'). Intentelo denuevo.\n")
+            else:
+                break
 
         #ingresar naturaleza de la aplicacion: web/api
         while True:
-            naturaleza_app = str(input("Ingrese la naturaleza de la app [web/api]: ")).lower()
 
-            if naturaleza_app == "web":
+            naturaleza_app = int(input("""\nNaturaleza de la aplicación\n\n-   1. Web\n-   2. Api\n\nSeleccione una naturaleza (1-2): """))
+
+            if naturaleza_app == 1:
                 await crearAppWeb(proyecto, nombre_app)
                 break
-            elif naturaleza_app == "api":
+            elif naturaleza_app == 2:
                 await crearAppApi(proyecto, nombre_app)
                 break
             else:
-                print("\nLa naturaleza ingresada no es válida.\n")
+                print("\nERROR: La naturaleza ingresada no es válida. Ingrese una opción válida.\n")
 
-        print(f"\nApplicaciones creadas [ {i+1} / {cant_aplicaciones} ]\n")
+        print(f"\nAplicaciones creadas [ {i+1} / {cant_aplicaciones} ]\n")
     
     print("Todas las aplicaciones fueron creadas correctamente\n")
 
@@ -162,7 +176,7 @@ def mostrarTitulo(titulo):
 async def main():
     
     await crearEntornoVirtual()
-    await instalarLibrerias(["django "])
+    await instalarLibrerias(["django"])
     await crearProyecto()
     print("Fin del programa")
 
