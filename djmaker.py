@@ -4,7 +4,6 @@ async def crearEntornoVirtual():
     """
     Crea el entorno virtual donde se instalaran las dependencias para el proyecto
     """
-
     mostrarTitulo("Creando entorno virtual...")
 
     await ejecutarProceso(("python", "-m", "venv", "venv"))
@@ -18,7 +17,6 @@ async def instalarLibrerias(librerias: list[str]):
     :param librerias: La lista de librerias a instalar en el entorno virtual
     :type librerias: list[str]
     """
-
     mostrarTitulo("Instalando librerias...")
 
     entorno = os.path.join("venv", "Scripts", "python.exe")
@@ -41,6 +39,8 @@ async def crearProyecto():
 
         if " " in nombre_proyecto:
             print("\nERROR: El nombre del proyecto no debe contener espacios (Ej: 'mi_proyecto'). Intentelo denuevo.\n ")
+        elif nombre_proyecto == "venv":
+            print("\nERROR: El nombre del proyecto no debe ser igual al nombre del entorno virtual. Intentelo denuevo.\n ")
         else:
             break
 
@@ -67,7 +67,6 @@ async def crearAplicacionesEnProyecto(proyecto):
 
     :param proyecto: El proyecto donde se crearán e instalarán las aplicaciones indicadas.
     """
-
     mostrarTitulo("Creando aplicaciones...")
 
     while True:
@@ -83,18 +82,21 @@ async def crearAplicacionesEnProyecto(proyecto):
         print(F"\nCreando aplicacion {i+1}\n")
 
         #ingresar nombre de la aplicacion
-
         while True:
             nombre_app = str(input("Ingrese el nombre de la app: "))
 
-            if " " in nombre_app:
+            #si el proyecto u otra app ya tiene el nombre dado, debe ingresarse otro
+            p = os.path.join(f"{proyecto}")
+            if nombre_app in p:
+                print(f"\nERROR: El nombre de la aplicación no debe ser igual al nombre del proyecto u otra aplicación creada.\n")
+            #si contiene caracteres invalidos
+            elif (" " in nombre_app) or ("." in nombre_app):
                 print("\nERROR: El nombre de la aplicación no debe contener espacios (Ej: 'mi_aplicación'). Intentelo denuevo.\n")
             else:
                 break
 
         #ingresar naturaleza de la aplicacion: web/api
         while True:
-
             naturaleza_app = int(input("\nNaturaleza de la aplicación\n\n\t-1. Web\n\t-2. Api\n\nSeleccione una naturaleza (1-2): """))
 
             if naturaleza_app == 1:
@@ -207,7 +209,6 @@ def instalarApp(nombre_proyecto, nombre_aplicacion):
 
 async def main():
     await crearEntornoVirtual()
-
     #agregar aqui las dependencias deseadas (EJ : ["django", "flask", "pillow", etc...])
     await instalarLibrerias(["django"])
 
