@@ -19,12 +19,21 @@ Este comando iniciará el script pasando por cada una de las etapas explicadas a
 En primer lugar, DjMaker creará un entorno virtual python en una carpeta llamada venv, donde se instalaran las dependencias django.
 
 ## 2. Instalación de librerias
-En segundo lugar, se utilizará el entorno virtual creado anteriormente para instalar las dependencias necesarias.
-Las dependencias a instalar pueden ser modificadas en la funcion **instalarLibrerias()** dentro de la funcion **main**, al final del codigo
+En segundo lugar, se utilizará el entorno virtual creado anteriormente para instalar las dependencias que se indiquen.
+Por defecto se instalará la ultima version de django, pero las dependencias a instalar pueden ser modificadas en la función **instalarLibrerias()** dentro de la funcion **main**, al principio del código.
+Es posible también instalar versiones concretas de dependencias, siguiendo el formato **dependencia==version**.
 
-`await instalarLibrerias(["django", "flask", "etc"])` <-- aqui se ponen las librerias necesarias
+Con versiones específicas:
 
-**NOTA**: El script no está pensado para instalar versiones concretas de dependencias, por lo que de momento instalará las versiones mas recientes de las mismas.
+`await instalarLibrerias(["django==4.2.19", "flask==3.1.1", "etc"])` <-- librerias necesarias y sus versiones
+
+O la ultima version de las dependencias:
+
+`await instalarLibrerias(["django", "flask", "etc"])` <-- solo nombres
+
+Tambien es posible mezclar entre versiones concretas y ultimas versiones:
+
+`await instalarLibrerias(["django", "flask==3.1.1", "etc"])`
 
 ## 3. Creación del proyecto
 En tercer lugar, instaladas ya las dependencias necesarias, se procederá a la creacion del proyecto.

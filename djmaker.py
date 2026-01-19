@@ -1,4 +1,14 @@
-import os , asyncio
+from os import path, makedirs, listdir
+import asyncio
+
+async def main():
+    await crearEntornoVirtual()
+    #agregar aqui las dependencias deseadas junto con sus versiones. Formato ["dependencia==version"]
+    #  (Ejemplo : ["django==4.2.19", "flask==3.1.1", etc...])
+    await instalarLibrerias(["django"])
+
+    await crearProyecto()
+    print("Fin del programa")
 
 async def crearEntornoVirtual():
     """
@@ -19,7 +29,7 @@ async def instalarLibrerias(librerias: list[str]):
     """
     mostrarTitulo("Instalando librerias...")
 
-    entorno = os.path.join("venv", "Scripts", "python.exe")
+    entorno = path.join("venv", "Scripts", "python.exe")
 
     for libreria in librerias:
         print(f"Instalando {libreria}...\n")
@@ -46,11 +56,11 @@ async def crearProyecto():
 
     print(f"\nCreando proyecto llamado '{nombre_proyecto}' \n")
 
-    django_admin_path = os.path.join("venv", "Scripts", "django-admin.exe")
+    django_admin_path = path.join("venv", "Scripts", "django-admin.exe")
 
     await ejecutarProceso((django_admin_path, "startproject", nombre_proyecto))
 
-    print(f"Proyecto {nombre_proyecto} creado con exito \n")
+    print(f"Proyecto {nombre_proyecto} creado con exito.")
     
     await crearAplicacionesEnProyecto(nombre_proyecto)
 
@@ -86,8 +96,8 @@ async def crearAplicacionesEnProyecto(proyecto):
             nombre_app = str(input("Ingrese el nombre de la app: "))
 
             #si el proyecto u otra app ya tiene el nombre dado, debe ingresarse otro
-            p = os.path.join(f"{proyecto}")
-            if nombre_app in p:
+            aplicaciones = listdir(f"{proyecto}")
+            if nombre_app in aplicaciones:
                 print(f"\nERROR: El nombre de la aplicación no debe ser igual al nombre del proyecto u otra aplicación creada.\n")
             #si contiene caracteres invalidos
             elif (" " in nombre_app) or ("." in nombre_app):
@@ -123,7 +133,7 @@ async def crearApp(proyecto,nombre_app):
     :param proyecto: El proyecto donde se creará la app
     :param nombre_app: El nombre que tendrá la app
     """
-    django_path = os.path.abspath(os.path.join("venv", "Scripts", "django-admin.exe"))
+    django_path = path.abspath(path.join("venv", "Scripts", "django-admin.exe"))
 
     print(f"\nCreando app '{nombre_app}'...")
 
@@ -146,17 +156,17 @@ async def crearAppWeb(proyecto,nombre_app):
     await crearApp(proyecto,nombre_app)
     
     #Se crea la carpeta templates y una carpeta con el nombre de la app
-    templates_path= os.path.join(proyecto,nombre_app,"templates", nombre_app)
-    os.makedirs(templates_path, exist_ok=True)
+    templates_path= path.join(proyecto,nombre_app,"templates", nombre_app)
+    makedirs(templates_path, exist_ok=True)
 
     #Crear archivo index.html
-    html = os.path.join(templates_path, "index.html")
+    html = path.join(templates_path, "index.html")
     HTML_CONT ="""<!DOCTYPE html>\n<html lang="en">\n<head>\n\t<meta charset="UTF-8">\n\t<meta name="viewport" content="width=device-width, initial-scale=1.0">\n\t<title>Document</title>\n</head>\n<body>\n\n</body>\n</html>"""
     with open(html, 'w') as f:
         f.write(HTML_CONT) 
 
     #Crear archivo urls.py
-    urls = os.path.join(proyecto, nombre_app, "urls.py")
+    urls = path.join(proyecto, nombre_app, "urls.py")
     URLS_CONT=  """from django.contrib import admin\nfrom django.urls import path\n\nurlpatterns = [\n\tpath('admin/', admin.site.urls),\n]"""
     with open(urls, 'w') as f:
         f.write(URLS_CONT)
@@ -203,17 +213,9 @@ def instalarApp(nombre_proyecto, nombre_aplicacion):
         #se agrega el nombre de la app al principio de la lista
         nuevo.append(f"\t'{nombre_aplicacion}',\n")
 
-        #se termina sobreescribe con el archivo settings.py con el nuevo contenido
+        #se sobreescribe con el archivo settings.py con el nuevo contenido
         nuevo = nuevo + lineas[instaladas_index+1:len(lineas)]
         archivo.writelines(nuevo)
-
-async def main():
-    await crearEntornoVirtual()
-    #agregar aqui las dependencias deseadas (EJ : ["django", "flask", "pillow", etc...])
-    await instalarLibrerias(["django"])
-
-    await crearProyecto()
-    print("Fin del programa")
 
 if __name__ == "__main__":
     asyncio.run(main())
