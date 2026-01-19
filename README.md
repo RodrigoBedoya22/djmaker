@@ -2,15 +2,19 @@
 Dj maker es un script que facilita la creación de proyectos django : creando un entorno virtual, permitiendo la creacion de proyectos con nombre personalizado y también creación de multiples aplicaciones de dos naturalezas concretas: **web** y **api**.
 
 ## Instalación
-Desde Visual Studio Code acceda a la carpeta donde creará su proyecto django y abra una nueva terminal en la misma.
+1. Acceda a la carpeta donde creará su proyecto django y abra una nueva terminal en la misma.
 
-Clone el repositorio con el siguiente comando:
+2. Clone el repositorio con el siguiente comando:
 
 `git clone https://github.com/RodrigoBedoya22/djmaker.git`
 
-Una vez clonado el repositorio ejecute el script con el comando:
+3. Una vez clonado el repositorio ejecute el script con el comando:
 
-`python djmaker/djmaker.py`
+**windows:**
+`python djmaker/windows/djmaker.py`
+
+**linux:**
+`python djmaker/linux/djmaker.py`
 
 Este comando iniciará el script pasando por cada una de las etapas explicadas a continuación.
 
