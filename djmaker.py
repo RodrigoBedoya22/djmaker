@@ -44,15 +44,7 @@ async def crearProyecto():
     """
     mostrarTitulo("Creando proyecto...")
 
-    while True:
-        nombre_proyecto = str(input("Ingrese el nombre de su proyecto: "))
-
-        if " " in nombre_proyecto:
-            print("\nERROR: El nombre del proyecto no debe contener espacios (Ej: 'mi_proyecto'). Intentelo denuevo.\n ")
-        elif nombre_proyecto == "venv":
-            print("\nERROR: El nombre del proyecto no debe ser igual al nombre del entorno virtual. Intentelo denuevo.\n ")
-        else:
-            break
+    nombre_proyecto = nombrarProyecto()
 
     print(f"\nCreando proyecto llamado '{nombre_proyecto}' \n")
 
@@ -79,31 +71,14 @@ async def crearAplicacionesEnProyecto(proyecto):
     """
     mostrarTitulo("Creando aplicaciones...")
 
-    while True:
-        cant_aplicaciones = int(input("¿Cuántas aplicaciones desea crear?: "))
-
-        if cant_aplicaciones <= 0:
-           print("\nERROR: El número de aplicaciones debe ser mayor a cero.\n")
-        else:
-           break
+    cant_aplicaciones = indicarCantidadAplicaciones()
 
     for i in range(cant_aplicaciones):
         
         print(F"\nCreando aplicacion {i+1}\n")
 
         #ingresar nombre de la aplicacion
-        while True:
-            nombre_app = str(input("Ingrese el nombre de la app: "))
-
-            #si el proyecto u otra app ya tiene el nombre dado, debe ingresarse otro
-            aplicaciones = listdir(f"{proyecto}")
-            if nombre_app in aplicaciones:
-                print(f"\nERROR: El nombre de la aplicación no debe ser igual al nombre del proyecto u otra aplicación creada.\n")
-            #si contiene caracteres invalidos
-            elif (" " in nombre_app) or ("." in nombre_app):
-                print("\nERROR: El nombre de la aplicación no debe contener espacios (Ej: 'mi_aplicación'). Intentelo denuevo.\n")
-            else:
-                break
+        nombre_app = nombrarAplicacion(proyecto)
 
         #ingresar naturaleza de la aplicacion: web/api
         while True:
@@ -119,7 +94,6 @@ async def crearAplicacionesEnProyecto(proyecto):
                 print("\nERROR: La naturaleza ingresada no es válida. Ingrese una opción válida.\n")
 
         #instalar app en proyecto
-
         instalarApp(proyecto,nombre_app)
 
         print(f"\nAplicaciones creadas [ {i+1} / {cant_aplicaciones} ]\n")
@@ -216,6 +190,56 @@ def instalarApp(nombre_proyecto, nombre_aplicacion):
         #se sobreescribe con el archivo settings.py con el nuevo contenido
         nuevo = nuevo + lineas[instaladas_index+1:len(lineas)]
         archivo.writelines(nuevo)
+
+def nombrarProyecto():
+    """
+    Pide al usuario que ingrese el nombre del proyecto. Si el nombre es válido, lo retorna.
+    """
+    while True:
+        nombre_proyecto = str(input("Ingrese el nombre de su proyecto: "))
+
+        if " " in nombre_proyecto:
+            print("\nERROR: El nombre del proyecto no debe contener espacios (Ej: 'mi_proyecto'). Intentelo denuevo.\n ")
+        elif nombre_proyecto == "venv":
+            print("\nERROR: El nombre del proyecto no debe ser igual al nombre del entorno virtual. Intentelo denuevo.\n ")
+        else:
+            break
+    return nombre_proyecto
+
+def indicarCantidadAplicaciones():
+    """
+    Pide al usuario ingresar la cantidad de aplicaciones a crear en el proyecto. 
+    No pueden crearse cero o cantidades negativas de aplicaciones.
+    """
+    while True:
+        cantidad = int(input("¿Cuántas aplicaciones desea crear?: "))
+
+        if cantidad <= 0:
+           print("\nERROR: El número de aplicaciones debe ser mayor a cero.\n")
+        else:
+           break
+    return cantidad
+
+def nombrarAplicacion(proyecto):
+    """
+    Pide al usuario ingresar el nombre de la aplicacion a crear en el proyecto dado.
+    El nombre ingresado no puede ser el nombre de otra aplicación u el mismo nombre del proyecto
+    
+    :param proyecto: El proyecto que contendrá la aplicación con el nombre ingresado.
+    """
+    while True:
+        nombre_app = str(input("Ingrese el nombre de la app: "))
+        #si el proyecto u otra app ya tiene el nombre dado, debe ingresarse otro
+        aplicaciones = listdir(f"{proyecto}")
+        
+        if nombre_app in aplicaciones:
+            print(f"\nERROR: El nombre de la aplicación no debe ser igual al nombre del proyecto u otra aplicación creada.\n")
+        #si contiene caracteres invalidos
+        elif (" " in nombre_app) or ("." in nombre_app):
+            print("\nERROR: El nombre de la aplicación no debe contener espacios (Ej: 'mi_aplicación'). Intentelo denuevo.\n")
+        else:
+            break
+    return nombre_app
 
 if __name__ == "__main__":
     asyncio.run(main())
